@@ -1,0 +1,6 @@
+*.js linguist-vendored
+*.css linguist-vendored
+*.min.js linguist-vendored
+*.min.css linguist-vendored
+/static/* linguist-vendored
+/media/* linguist-vendored
