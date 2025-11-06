@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'leaflet',
     'user',
     'api',
-    'mycar',
     'reservation',
 ]
 

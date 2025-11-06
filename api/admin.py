@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Onboarding, FAQ, SupportMessage
+from .models import Onboarding, FAQ, SupportMessage, Marka, Model, Body
 from django.utils.safestring import mark_safe
 
 class ImagePreviewMixin:
@@ -13,6 +13,23 @@ class ImagePreviewMixin:
 class OnboardingAdmin(ImagePreviewMixin, admin.ModelAdmin):
     list_display = ('title', 'image_preview',)
     search_fields = ('title',)
+
+
+@admin.register(Marka)
+class MarkaAdmin(admin.ModelAdmin):
+    list_display = ('marka',)
+    search_fields = ('marka',)
+
+@admin.register(Model)
+class ModelAdmin(admin.ModelAdmin):
+    list_display = ('model', 'marka')
+    list_filter = ('marka',)
+    search_fields = ('model', 'marka__marka')
+
+@admin.register(Body)
+class BodyAdmin(admin.ModelAdmin):
+    list_display = ('kuzov',)
+    search_fields = ('kuzov',)
 
 
 @admin.register(FAQ)

@@ -180,3 +180,4 @@ class Booking(models.Model):
                 self.user_subscription.save()
 
         super().delete(*args, **kwargs)
+        

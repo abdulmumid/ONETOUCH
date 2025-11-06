@@ -9,8 +9,7 @@ import phonenumbers
 from django.core.exceptions import ValidationError
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.utils.translation import gettext_lazy as _
-from mycar.models import Marka, Model, Body
-
+from django.apps import apps
 
 
 User = settings.AUTH_USER_MODEL
@@ -112,15 +111,15 @@ class OTP(models.Model):
 
 
 class MycarProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='mycar_profile')
-    marka = models.ForeignKey(Marka, on_delete=models.SET_NULL, null=True, verbose_name=_("Марка"))
-    model = models.ForeignKey(Model, on_delete=models.SET_NULL, null=True, verbose_name=_("Модель"))
-    body = models.ForeignKey(Body, on_delete=models.SET_NULL, null=True, verbose_name=_("Кузов"))
-    gos_number = models.CharField(_("Гос. номер"), max_length=20, unique=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='mycar_profile')
+    marka = models.ForeignKey('api.Marka', on_delete=models.SET_NULL, null=True, verbose_name=_("Марка"))
+    model = models.ForeignKey('api.Model', on_delete=models.SET_NULL, null=True, verbose_name=_("Модель"))
+    body = models.ForeignKey('api.Body', on_delete=models.SET_NULL, null=True, verbose_name=_("Кузов"))
+    gos_number = models.CharField(("Гос. номер"), max_length=20, unique=True)
 
     class Meta:
-        verbose_name = _("Профиль Моя Машина")
-        verbose_name_plural = _("Профили Моя Машина")
+        verbose_name = ("Профиль Моя Машина")
+        verbose_name_plural = ("Профили Моя Машина")
 
     def __str__(self):
         return f"Профиль Моя Машина для {self.user.email}"
@@ -128,11 +127,11 @@ class MycarProfile(models.Model):
 
 class Avatar(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='avatar')
-    image = models.ImageField(_("Аватар"), upload_to='avatars/')
+    image = models.ImageField(("Аватар"), upload_to='avatars/')
 
     class Meta:
-        verbose_name = _("Аватар")
-        verbose_name_plural = _("Аватары")
+        verbose_name = ("Аватар")
+        verbose_name_plural = ("Аватары")
 
     def __str__(self):
         return f"Аватар для {self.user.email}"
