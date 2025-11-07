@@ -4,6 +4,10 @@ from .models import Onboarding, FAQ, SupportMessage
 from .serializers import OnboardingSerializer, FAQSerializer, SupportMessageSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 import telebot
+import os 
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class OnboardingListView(generics.ListAPIView):
     permission_classes = [AllowAny]
@@ -27,10 +31,10 @@ class SupportMessageView(generics.CreateAPIView):
         self.send_telegram_notification(instance)
 
     def send_telegram_notification(self, message):
-        bot = telebot.TeleBot("7948742472:AAEz9hwOzf3rKH07RLGOToYL7kJ9B0_1Cxg")
+        bot = telebot.TeleBot(os.getenv('TELEGRAM_BOT_TOKEN'))
         try:
             bot.send_message(
-                chat_id=5349154050,
+                chat_id=os.getenv('TELEGRAM_CHAT_ID'),
                 text=(
                     f"Новое сообщение поддержки:\n\n"
                     f"Пользователь: {message.user.email}\n"

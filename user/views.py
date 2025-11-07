@@ -18,6 +18,10 @@ from rest_framework import status
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.contrib.auth import get_user_model
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 User = get_user_model()
 
@@ -189,7 +193,7 @@ class GoogleLoginView(APIView):
         if not token:
             return Response({"error": "Token is required"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), "883362853784-niqj0ful7mar3kd620csuqc9kvqpum29.apps.googleusercontent.com")
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), os.getenv('GOOGLE_CLIENT_ID'))
             email = idinfo['email']
             user, created = User.objects.get_or_create(email=email, defaults={"username": email.split("@")[0]})
             refresh = RefreshToken.for_user(user)
