@@ -1,6 +1,6 @@
 from django.contrib import admin
 from leaflet.admin import LeafletGeoAdmin
-from .models import CarWash, Booking, Subscription, UserSubscription
+from .models import CarWash, Booking, Subscription, UserSubscription, Notification
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -74,3 +74,10 @@ class BookingAdmin(admin.ModelAdmin):
             if not change or 'status' in form.changed_data:
                 obj.user_subscription.used_washes += 1
                 obj.user_subscription.save()
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'created_at')
+    search_fields = ('user__phone', 'message')
+    readonly_fields = ('created_at',)

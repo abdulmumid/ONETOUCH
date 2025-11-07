@@ -72,10 +72,18 @@ class UserSubscription(models.Model):
         return self.used_washes < self.subscription.moyka
 
     def save(self, *args, **kwargs):
-        if not self.pk:  # если создаётся впервые
+        is_new = self.pk is None
+        if is_new:
             self.start_date = timezone.now().date()
             self.end_date = self.start_date + timedelta(days=self.subscription.duration_days)
         super().save(*args, **kwargs)
+
+        if is_new:
+            Notification.objects.create(
+                user=self.user,
+                message=f"Вы успешно оформили подписку '{self.subscription.name}' до {self.end_date.strftime('%d.%m.%Y')}."
+            )
+
 
     def __str__(self):
         return f"{self.user} - {self.subscription}"
@@ -154,6 +162,10 @@ class Booking(models.Model):
         if is_new and not self.cancelled and self.user_subscription:
             self.user_subscription.used_washes += 1
             self.user_subscription.save()
+            Notification.objects.create(
+                user=self.user,
+                message=f"Вы успешно записаны на {self.date.strftime('%d.%m.%Y')} в {self.time.strftime('%H:%M')}."
+            )
 
         # Обработка изменений существующей брони
         if previous_state and self.user_subscription:
@@ -162,12 +174,17 @@ class Booking(models.Model):
                 if self.user_subscription.used_washes > 0:
                     self.user_subscription.used_washes -= 1
                     self.user_subscription.save()
+                Notification.objects.create(
+                    user=self.user,
+                    message=f"Вы отменили бронирование на {self.date.strftime('%d.%m.%Y')} в {self.time.strftime('%H:%M')}."
+                )
 
             # Восстановление брони
             elif previous_state.cancelled and not self.cancelled:
                 if self.user_subscription.has_washes_left():
                     self.user_subscription.used_washes += 1
                     self.user_subscription.save()
+        
 
     def delete(self, *args, **kwargs):
         # Возврат мойки только для будущей или текущей отмененной брони
@@ -180,4 +197,16 @@ class Booking(models.Model):
                 self.user_subscription.save()
 
         super().delete(*args, **kwargs)
-        
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
+    message = models.TextField("Сообщение")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.message[:30]}"
+
+    class Meta:
+        verbose_name = "Уведомление"
+        verbose_name_plural = "Уведомления"

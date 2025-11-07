@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CarWash, Booking, Subscription, UserSubscription
+from .models import CarWash, Booking, Subscription, UserSubscription, Notification
 
 class CarWashSerializer(serializers.ModelSerializer):
     latitude = serializers.SerializerMethodField()
@@ -41,3 +41,9 @@ class BookingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         booking = Booking.objects.create(**validated_data)
         return booking
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = "__all__"

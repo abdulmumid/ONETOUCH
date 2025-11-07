@@ -15,3 +15,4 @@ class SupportMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = SupportMessage
         fields = ['id', 'user', 'subject', 'message', 'created_at']
+

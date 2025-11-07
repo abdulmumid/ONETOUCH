@@ -1,6 +1,6 @@
 from rest_framework import viewsets, generics
-from .models import CarWash, Booking, Subscription, UserSubscription
-from .serializers import CarWashSerializer, BookingSerializer, SubscriptionSerializer, UserSubscriptionSerializer
+from .models import CarWash, Booking, Subscription, UserSubscription, Notification
+from .serializers import CarWashSerializer, BookingSerializer, SubscriptionSerializer, UserSubscriptionSerializer, NotificationSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -32,3 +32,8 @@ class BookingViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Booking.objects.filter(user=user)
+
+class NotificationView(generics.ListAPIView):
+    queryset = Notification.objects.all()
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
