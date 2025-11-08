@@ -1,9 +1,15 @@
 from pathlib import Path
 from datetime import timedelta
 import os
+<<<<<<< HEAD
 from dotenv import load_dotenv
 
 load_dotenv()
+=======
+from django.templatetags.static import static
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+>>>>>>> f1e4b04 (apps)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -12,7 +18,17 @@ DEBUG = os.getenv('DEBUG')
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
-    'jazzmin',
+#Unfold
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
+    "unfold.contrib.import_export",
+    "unfold.contrib.guardian",
+    "unfold.contrib.simple_history",
+    "unfold.contrib.location_field",
+    "unfold.contrib.constance",
+#Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -21,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.gis',
     'social_django',
+#rest_framework
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -29,9 +46,16 @@ INSTALLED_APPS = [
     'ckeditor',
     'phonenumber_field',
     'leaflet',
+<<<<<<< HEAD
     'user',
     'api',
     'reservation',
+=======
+#APPS
+    'apps.user',
+    'apps.main',
+    'apps.payment',
+>>>>>>> f1e4b04 (apps)
 ]
 
 MIDDLEWARE = [
@@ -147,3 +171,84 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Bishkek'
+
+
+
+from django.utils.translation import gettext_lazy as _
+from django.templatetags.static import static
+from django.urls import reverse_lazy
+
+UNFOLD = {
+    "SITE_TITLE": "Админ-панель Мойка",
+    "SITE_HEADER": "Мойка",
+    "SITE_DROPDOWN": [
+        {
+            "icon": "diamond",
+            "title": _("Перейти в сайт ->"),
+            "link": "https://aero.navisdevs.ru"
+        }
+    ],
+    "DARK_MODE": True,
+
+    "SIDEBAR": {
+        "show_search": False,
+        "command_search": False,
+        "show_all_applications": False
+    },
+
+    "SITE_URL": "https://aero.navisdevs.ru",
+    "SITE_SYMBOL": "speed",
+    "SITE_LOGO": {
+        "light": lambda request: static("Frame.png"),
+        "dark": lambda request: static("Frame.png")
+    },
+    "SITE_FAVICONS": [
+        {
+            "rel": "icon",
+            "sizes": "32x32",
+            "type": "image/svg+xml",
+            "href": lambda request: static("favicon.svg")
+        }
+    ],
+    "BORDER_RADIUS": "6px",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+    "SHOW_BACK_BUTTON": False,
+
+    "COLORS": {
+        "primary": {
+            "50": "220, 243, 250",
+            "100": "190, 232, 247",
+            "200": "140, 212, 240",
+            "300": "90, 192, 232",
+            "400": "40, 172, 224",
+            "500": "0, 164, 224",
+            "600": "0, 140, 190",
+            "700": "0, 120, 160",
+            "800": "0, 100, 130",
+            "900": "0, 80, 105",
+            "950": "0, 60, 80"
+        },
+        "font": {
+            "subtle-light": "0, 0, 0",
+            "subtle-dark": "255, 255, 255",
+            "default-light": "0, 0, 0",
+            "default-dark": "255, 255, 255",
+            "important-light": "0, 0, 0",
+            "important-dark": "255, 255, 255"
+        },
+        "base": {
+            "light": "30, 30, 30",
+            "dark": "30, 30, 30"
+        },
+        "input": {
+            "light": "45, 45, 45",
+            "dark": "45, 45, 45"
+        }
+    },
+
+    "STYLES": [
+        lambda request: static("css/custom.css")
+    ]
+}
+
